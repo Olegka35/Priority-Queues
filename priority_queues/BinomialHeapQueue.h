@@ -39,6 +39,7 @@ private:
 	BinomialNode<T> *root;
 	BinomialNode<T> *rootr;
 	BinomialNode<T>* mergeNodes(BinomialNode<T>* node1, BinomialNode<T>* node2);
+	void insert(BinomialNode<T>* node);
 	int count;
 	void binomial_link(BinomialNode<T>* node1, BinomialNode<T>* node2);
 };
@@ -74,12 +75,17 @@ void BinomialHeapQueue<T>::merge(PriorityQueue<T>& queue) {
 	if (this == &queue)
 		return;
 	BinomialHeapQueue<T>& skep_heap_queue = static_cast<BinomialHeapQueue<T>& >(queue);
-	root = mergeNodes(root, queue->root);
-	
+	insert(queue->root);
+}
+
+template<typename T>
+void BinomialHeapQueue<T>::insert(BinomialNode<T> *node) {
+	root = mergeNodes(root, node);
+
 	BinomialNode<T>* x = root, prev_x = NULL, next_x = NULL;
 	next_x = x->sibling;
 	while (next_x != NULL) {
-		if ((x->degree != next_x->degree) || 
+		if ((x->degree != next_x->degree) ||
 			((next_x->sibling != NULL) && (next_x->sibling)->degree == x->degree))
 		{
 			prev_x = x;
@@ -137,20 +143,44 @@ BinomialNode<T>* BinomialHeapQueue<T>::mergeNodes(BinomialNode<T> *node1, Binomi
 
 template<typename T>
 void BinomialHeapQueue<T>::insert(int key, T value) {
-	merge(new BinomialNode<T>(key, value), root);
+	insert(new BinomialNode<T>(key, value));
 }
 
 template<typename T>
 T BinomialHeapQueue<T>::getMin() {
-	return root->data;
+	BinomialNode<T>* minNode = this->root;
+	BinomialNode<T>* node = this->root;
+	while (node->sibling != NULL) {
+		node = node->sibling;
+		if (node->key < minNode->key)
+			minNode = node;
+	}
+	return minNode->data;
 }
 
 template<typename T>
 T BinomialHeapQueue<T>::popMin() {
-	SkewNode<T> *oldRoot = root;
-	T data = root->data;
-	root = MergeTrees(root->left, root->right);
-	delete oldRoot;
+	BinomialNode<T>* minNode = this->root;
+	BinomialNode<T>* node = this->root;
+	BinomialNode<T>* prevNode = NULL;
+	while (node->sibling != NULL) {
+		node = node->sibling;
+		if (node->key < minNode->key) {
+			prevNode = minNode;
+			minNode = node;
+		}
+	}
+
+	T data = minNode->data;
+	BinomialHeapQueue<T>* temp = new BinomialHeapQueue<T>();
+	node = minNode->child;
+	do {
+		temp->insert(childNode);
+		childNode = childNode->sibling;
+	} while (childNode != NULL);
+	prevNode->sibling = minNode->sibling;
+	delete minNode;
+	merge(temp);
 	return data;
 }
 
@@ -160,7 +190,7 @@ void BinomialHeapQueue<T>::makeEmpty() {
 	root = NULL;
 }
 
-template<typename T>
+/*template<typename T>
 void BinomialHeapQueue<T>::deleteNode(SkewNode<T> *t) {
 	if (t != NULL) {
 		deleteNode(t->left);
@@ -172,4 +202,4 @@ void BinomialHeapQueue<T>::deleteNode(SkewNode<T> *t) {
 template<typename T>
 bool BinomialHeapQueue<T>::isEmpty() {
 	return root == NULL;
-}
+}*/

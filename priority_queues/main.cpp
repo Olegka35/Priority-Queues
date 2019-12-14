@@ -3,6 +3,7 @@
 #include "PriorityQueue.h"
 #include "LeftistQueue.h"
 #include "SkewHeapQueue.h"
+#include "BinomialHeapQueue.h"
 
 using namespace std;
 
