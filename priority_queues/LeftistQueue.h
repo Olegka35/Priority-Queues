@@ -9,7 +9,7 @@ public:
 	LeftistNode<T> *left;
 	LeftistNode<T> *right;
 	int dist;
-	LeftistNode(int key, T data, LeftistNode<T> *lt = NULL, LeftistNode<T> *rt = NULL, int dist = 0)
+	LeftistNode(int key, T data, LeftistNode<T> *lt = nullptr, LeftistNode<T> *rt = nullptr, int dist = 0)
 	{
 		this->key = key;
 		this->data = data;
@@ -24,12 +24,11 @@ template<typename T>
 class LeftistQueue : public PriorityQueue<T> {
 public:
 	LeftistQueue();
-	LeftistQueue(LeftistQueue<T> &rhs);
 	~LeftistQueue();
 	void insert(int key, T value) override;
 	T popMin() override;
 	T getMin() override;
-	//void remove(T value) override;
+	void remove(T value) override;
 	void makeEmpty();
 	void merge(PriorityQueue<T>& queue);
 	bool isEmpty();
@@ -43,13 +42,7 @@ private:
 
 template<typename T>
 LeftistQueue<T>::LeftistQueue() {
-	root = NULL;
-}
-
-template<typename T>
-LeftistQueue<T>::LeftistQueue(LeftistQueue<T> &rhs) {
-	root = NULL;
-	*this = rhs;
+	root = nullptr;
 }
 
 template<typename T>
@@ -63,14 +56,14 @@ void LeftistQueue<T>::merge(PriorityQueue<T>& queue) {
 		return;
 	LeftistQueue<T>& leftist_queue = static_cast<LeftistQueue<T>& >(queue);
 	root = MergeTrees(root, leftist_queue.root);
-	leftist_queue.root = NULL;
+	leftist_queue.root = nullptr;
 }
 
 template<typename T>
 LeftistNode<T> *LeftistQueue<T>::MergeTrees(LeftistNode<T> *h1, LeftistNode<T> *h2) {
-	if (h1 == NULL)
+	if (h1 == nullptr)
 		return h2;
-	if (h2 == NULL)
+	if (h2 == nullptr)
 		return h1;
 	if (h1->key < h2->key)
 		return MergeLeftAndRightTrees(h1, h2);
@@ -80,7 +73,7 @@ LeftistNode<T> *LeftistQueue<T>::MergeTrees(LeftistNode<T> *h1, LeftistNode<T> *
 
 template<typename T>
 LeftistNode<T> *LeftistQueue<T>::MergeLeftAndRightTrees(LeftistNode<T> *h1, LeftistNode<T> *h2) {
-	if (h1->left == NULL)
+	if (h1->left == nullptr)
 		h1->left = h2;
 	else {
 		h1->right = MergeTrees(h1->right, h2);
@@ -120,12 +113,12 @@ T LeftistQueue<T>::popMin() {
 template<typename T>
 void LeftistQueue<T>::makeEmpty() {
 	removeNode(root);
-	root = NULL;
+	root = nullptr;
 }
 
 template<typename T>
 void LeftistQueue<T>::removeNode(LeftistNode<T> * t) {
-	if (t != NULL)	{
+	if (t != nullptr)	{
 		removeNode(t->left);
 		removeNode(t->right);
 		delete t;
@@ -134,5 +127,10 @@ void LeftistQueue<T>::removeNode(LeftistNode<T> * t) {
 
 template<typename T>
 bool LeftistQueue<T>::isEmpty() {
-	return root == NULL;
+	return root == nullptr;
+}
+
+template<typename T>
+void LeftistQueue<T>::remove(T value) {
+	
 }

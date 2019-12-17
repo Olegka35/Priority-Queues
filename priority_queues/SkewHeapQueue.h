@@ -9,7 +9,7 @@ public:
 	T data;
 	SkewNode<T> *left;
 	SkewNode<T> *right;
-	SkewNode(int key, T data, SkewNode<T> *lt = NULL, SkewNode<T> *rt = NULL)
+	SkewNode(int key, T data, SkewNode<T> *lt = nullptr, SkewNode<T> *rt = nullptr)
 	{
 		this->key = key;
 		this->data = data;
@@ -22,7 +22,6 @@ template<typename T>
 class SkewHeapQueue : public PriorityQueue<T> {
 public:
 	SkewHeapQueue();
-	SkewHeapQueue(SkewHeapQueue<T> &rhs);
 	~SkewHeapQueue();
 	void insert(int key, T value) override;
 	T popMin() override;
@@ -39,13 +38,7 @@ private:
 
 template<typename T>
 SkewHeapQueue<T>::SkewHeapQueue() {
-	root = NULL;
-}
-
-template<typename T>
-SkewHeapQueue<T>::SkewHeapQueue(SkewHeapQueue<T> &rhs) {
-	root = NULL;
-	*this = rhs;
+	root = nullptr;
 }
 
 template<typename T>
@@ -59,14 +52,14 @@ void SkewHeapQueue<T>::merge(PriorityQueue<T>& queue) {
 		return;
 	SkewHeapQueue<T>& skew_heap_queue = static_cast<SkewHeapQueue<T>& >(queue);
 	root = MergeTrees(root, skew_heap_queue.root);
-	skew_heap_queue.root = NULL;
+	skew_heap_queue.root = nullptr;
 }
 
 template<typename T>
 SkewNode<T> *SkewHeapQueue<T>::MergeTrees(SkewNode<T> *h1, SkewNode<T> *h2) {
-	if (h1 == NULL)
+	if (h1 == nullptr)
 		return h2;
-	if (h2 == NULL)
+	if (h2 == nullptr)
 		return h1;
 	
 	if (h1->key <= h2->key) {
@@ -101,12 +94,12 @@ T SkewHeapQueue<T>::popMin() {
 template<typename T>
 void SkewHeapQueue<T>::makeEmpty() {
 	deleteNode(root);
-	root = NULL;
+	root = nullptr;
 }
 
 template<typename T>
 void SkewHeapQueue<T>::deleteNode(SkewNode<T> *t) {
-	if (t != NULL) {
+	if (t != nullptr) {
 		deleteNode(t->left);
 		deleteNode(t->right);
 		delete t;
@@ -115,5 +108,5 @@ void SkewHeapQueue<T>::deleteNode(SkewNode<T> *t) {
 
 template<typename T>
 bool SkewHeapQueue<T>::isEmpty() {
-	return root == NULL;
+	return root == nullptr;
 }
