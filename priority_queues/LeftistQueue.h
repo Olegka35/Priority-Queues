@@ -29,8 +29,8 @@ public:
 	T popMin() override;
 	T getMin() override;
 	void remove(T value) override;
+	void merge(PriorityQueue<T>& queue) override;
 	void makeEmpty();
-	void merge(PriorityQueue<T>& queue);
 	bool isEmpty();
 private:
 	LeftistNode<T> *root;
@@ -132,5 +132,5 @@ bool LeftistQueue<T>::isEmpty() {
 
 template<typename T>
 void LeftistQueue<T>::remove(T value) {
-	
+	// Нет эффективного
 }

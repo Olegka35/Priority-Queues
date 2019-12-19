@@ -33,8 +33,8 @@ public:
 	T popMin() override;
 	T getMin() override;
 	void remove(T value) override;
+	void merge(PriorityQueue<T>& queue) override;
 	void makeEmpty();
-	void merge(PriorityQueue<T>& queue);
 	bool isEmpty();
 
 	/*void print() {

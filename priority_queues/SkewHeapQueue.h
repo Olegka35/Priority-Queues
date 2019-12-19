@@ -26,14 +26,16 @@ public:
 	void insert(int key, T value) override;
 	T popMin() override;
 	T getMin() override;
-	//void remove(T value) override;
+	void remove(T value) override;
+	void merge(PriorityQueue<T>& queue) override;
 	void makeEmpty();
-	void merge(PriorityQueue<T>& queue);
 	bool isEmpty();
 private:
 	SkewNode<T> *root;
 	SkewNode<T> *MergeTrees(SkewNode<T> *h1, SkewNode<T> *h2);
 	void deleteNode(SkewNode<T> *t);
+	SkewNode<T>* search(T data, SkewNode<T>* node = nullptr);
+	void replaceNodePoint(SkewNode<T>* node, SkewNode<T>* new_node, SkewNode<T>* start = nullptr);
 };
 
 template<typename T>
@@ -109,4 +111,41 @@ void SkewHeapQueue<T>::deleteNode(SkewNode<T> *t) {
 template<typename T>
 bool SkewHeapQueue<T>::isEmpty() {
 	return root == nullptr;
+}
+
+template<typename T>
+SkewNode<T>* SkewHeapQueue<T>::search(T data, SkewNode<T>* node = nullptr) {
+	if (node == nullptr) node = root;
+	SkewNode<T>* result = nullptr;
+	if (node->data == data) {
+		result = node;
+		return result;
+	}
+	if (result == nullptr && node->left != nullptr)
+		result = search(data, node->left);
+	if (result == nullptr && node->right != nullptr)
+		result = search(data, node->right);
+	return result;
+}
+
+template<typename T>
+void SkewHeapQueue<T>::remove(T value) {
+	SkewNode<T>* node = search(value);
+	if (node != nullptr) {
+		replaceNodePoint(node, MergeTrees(node->left, node->right));
+	}
+}
+
+template<typename T>
+void SkewHeapQueue<T>::replaceNodePoint(SkewNode<T>* node, SkewNode<T>* new_node, SkewNode<T>* start = nullptr) {
+	if (start == nullptr) start = root;
+
+	if (start->left == node)
+		start->left = new_node;
+	else if (start->left != nullptr)
+		replaceNodePoint(node, new_node, start->left);
+	if (start->right == node)
+		start->right = new_node;
+	else if (start->right != nullptr)
+		replaceNodePoint(node, new_node, start->right);
 }

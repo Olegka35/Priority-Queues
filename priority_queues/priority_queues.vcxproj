@@ -119,6 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BinomialHeapQueue.h" />
+    <ClInclude Include="DHeapQueue.h" />
     <ClInclude Include="LeftistQueue.h" />
     <ClInclude Include="PriorityQueue.h" />
     <ClInclude Include="SkewHeapQueue.h" />
